@@ -1,0 +1,19 @@
+{
+  "name": "finalDeliverable",
+  "version": "1.0.0",
+  "description": "",
+  "main": "AudioEnergy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "canvas-sketch": "^0.7.1",
+    "express": "^4.17.1",
+    "p5": "^0.10.2",
+    "socket.io": "^2.3.0",
+    "tone": "^13.8.25"
+  }
+}
