@@ -3,33 +3,40 @@ const Tone = require("tone");
 const AudioEnergy = require("./AudioEnergy");
 const p5 = require("p5");
 
+//how to get data from SynthServer.js on startup & on user input > change data & push from this file to server
+let data = loadJSON("http://localhost:3000/api");
+
 
 
 new p5();
 
 
+
 //network elements
-let State = false;
+let State = data.state;
 
 let ready = false;
 
 
 // audio elements
-let frequency = 2040;
+let frequency;
 let type = ["sine", "square", "triangle"];
 let Synth
 const volume = -2;
 
 
+
 // visual elements
-let fxU = 0.5;
-let fxV = 0.5;
+let fxU =data.frequency;
+let fxV =data.type;
 let l = 0;
+
 
 
 
 window.setup = setup;
 async function setup() {
+    
     createCanvas(windowWidth, windowHeight);
     textAlign(CENTER, CENTER);
 
@@ -83,13 +90,14 @@ function draw() {
     textSize(40);
     drawWords(width * 0.5);
 
-    let data  = {
+    let checkData  = {
         State: State,
         Waveform: type[l],
         Frequency: frequency
     };
 
-    console.log(data);
+   console.log(checkData);
+//    console.log(l);
 }
 
 
@@ -121,10 +129,8 @@ window.mousePressed = mousePressed;
 function mousePressed() {
     updateEffects();
     updateSynth();
-    State = !State;
+   
 }
-
-
 
 
 
@@ -150,5 +156,11 @@ function keyPressed() {
     Synth.triggerAttackRelease(note, "4n");
   }
 }
+
+// async function loadData() {
+//     const resp = await fetch("/api");
+//     data = await resp.json();
+//     redraw();
+// }
 
 canvasSketch();

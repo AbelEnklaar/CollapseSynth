@@ -9,6 +9,7 @@
         cursor: pointer;
       }
     </style>
+<script src="/socket.io/socket.io.js"></script>
 
     <!--
       We use unpkg instead of cdnjs as its recommended by tone.js docs
@@ -18,11 +19,10 @@
     <!-- audio energy for hooking up visuals to audio  -->
     <script src="AudioEnergy.js"></script>
 
-    <!-- Synth as central sound output  -->
-    <script src="Collapse.js"></script>
+    <!-- Synth oscilator and for now sound output  -->
+    <script src="SynthOscClient.js"></script>
 
-    <!-- link to modules -->
-    <!-- <script src="Oscillator.js"></script> -->
+ 
 
 
   </head>

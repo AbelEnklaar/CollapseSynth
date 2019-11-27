@@ -12,8 +12,10 @@
   "dependencies": {
     "canvas-sketch": "^0.7.1",
     "express": "^4.17.1",
+    "jazz-midi": "^1.7.1",
     "p5": "^0.10.2",
     "socket.io": "^2.3.0",
-    "tone": "^13.8.25"
+    "tone": "^13.8.25",
+    "web-midi-api": "^2.0.6"
   }
 }
