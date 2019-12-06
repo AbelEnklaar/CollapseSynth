@@ -34,7 +34,7 @@ const volume = -2;
 // visual elements
 let fxU =data.frequency;
 let fxV =data.type;
-let l = count;
+let l ;
 
 
 
