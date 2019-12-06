@@ -1,4 +1,4 @@
-const canvasSketch = require("canvas-sketch");
+
 const Tone = require("tone");
 //const AudioEnergy = require("./AudioEnergy");
 const p5 = require("p5");
@@ -132,4 +132,4 @@ function drawWords(x) {
 }
 
 
-canvasSketch();
+
