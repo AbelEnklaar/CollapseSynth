@@ -1,31 +1,49 @@
-// require modules
-const http = require('http');
+// Require some modules
 const express = require("express");
+const http = require("http");
+const socketio = require("socket.io");
 
-// create an application
+// setup an express app
 const app = express();
-
-// when user visits /api
-app.get('/api', (req, res) => {
-  const data = {
-    oscillator : {
-        state: true,
-        type: 0.5,
-        frequency: 0.4  
-    },
-    delay : {
-        wet: 0.5,
-        dry: 0.5
-    }
-  };
-  res.send(data);
-});
 
 // setup a server
 const server = http.createServer(app);
 
-// start the server
+// Serve the current directory as a static website
+// This allows us to use HTML, JavaScript, etc
+app.use(express.static(__dirname));
+
+// -------- Start of Custom Server Code -------- //
+
+// hook up socketio with the server
+const io = socketio.listen(server);
+
+// number of active users
+let count = 0;
+
+// a user joined our site
+io.on("connection", socket => {
+  // increase count by 1
+  count++;
+
+  // tell all users the new count
+  io.emit("count", count);
+
+  // when a user leaves the site...
+  socket.on("disconnect", () => {
+    // then we reduce the count by 1
+    count--;
+
+    // and tell the new count to the user
+    io.emit("count", count);
+  });
+});
+
+// -------- End of Custom Server Code -------- //
+
+// Start listening on a standard port
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+server.listen(port, () => {
+  // Print to console just so we know its ready to go...
   console.log("Server listening on http://localhost:" + port);
 });

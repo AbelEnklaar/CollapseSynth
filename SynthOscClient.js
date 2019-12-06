@@ -1,10 +1,16 @@
 const canvasSketch = require("canvas-sketch");
 const Tone = require("tone");
-const AudioEnergy = require("./AudioEnergy");
+//const AudioEnergy = require("./AudioEnergy");
 const p5 = require("p5");
+let data = require("./SynthState.json");
+
+
+
+// the networking socket
+// socket = io.connect('http://localhost:3000');
 
 //how to get data from SynthServer.js on startup & on user input > change data & push from this file to server
-let data = loadJSON("http://localhost:3000/api");
+
 
 
 
@@ -14,8 +20,8 @@ new p5();
 
 //network elements
 let State = data.state;
-
 let ready = false;
+let count;
 
 
 // audio elements
@@ -29,7 +35,7 @@ const volume = -2;
 // visual elements
 let fxU =data.frequency;
 let fxV =data.type;
-let l = 0;
+let l = count;
 
 
 
@@ -41,21 +47,23 @@ async function setup() {
     textAlign(CENTER, CENTER);
 
 
-  Synth =   new Tone.MonoSynth({
+//   Synth =   new Tone.MonoSynth({
     
-        "oscillator" : {
-            "type" : type[l]
-     },
-     "envelope" : {
-         "attack" : 0.1
-     }
-    })
+//         "oscillator" : {
+//             "type" : type[l]
+//      },
+//      "envelope" : {
+//          "attack" : 0.1
+//      }
+//     })
 
-    Synth.connect(Tone.Master);
-    Tone.Master.volume.value = volume;
+//     Synth.connect(Tone.Master);
+//     Tone.Master.volume.value = volume;
 
 
     ready = true;
+
+  
 }
 
 
@@ -97,7 +105,7 @@ function draw() {
     };
 
    console.log(checkData);
-//    console.log(l);
+   
 }
 
 
@@ -111,24 +119,25 @@ function updateEffects() {
     fxV = max(0, min(1, mouseY / height));
 }
 
-function updateSynth() {
-    Synth =   new Tone.MonoSynth({
+// function updateSynth() {
+//     Synth =   new Tone.MonoSynth({
     
-        "oscillator" : {
-            "type" : type[l]
-     },
-     "envelope" : {
-         "attack" : 0.1
-     }
-    }).toMaster();
+//         "oscillator" : {
+//             "type" : type[l]
+//      },
+//      "envelope" : {
+//          "attack" : 0.1
+//      }
+//     }).toMaster();
 
 
-}
+// }
 
 window.mousePressed = mousePressed;
 function mousePressed() {
     updateEffects();
-    updateSynth();
+    // updateSynth();
+    // updateData();
    
 }
 
@@ -149,18 +158,13 @@ function drawWords(x) {
     text(int(frequency), x, height *0.5 );
 }
 
-window.keyPressed = keyPressed;
-function keyPressed() {
-  if (keyCode === LEFT_ARROW) {
-    const note = frequency;
-    Synth.triggerAttackRelease(note, "4n");
-  }
-}
-
-// async function loadData() {
-//     const resp = await fetch("/api");
-//     data = await resp.json();
-//     redraw();
+// window.keyPressed = keyPressed;
+// function keyPressed() {
+//   if (keyCode === LEFT_ARROW) {
+//     const note = frequency;
+//     Synth.triggerAttackRelease(note, "4n");
+//   }
 // }
+
 
 canvasSketch();
