@@ -21,7 +21,6 @@ new p5();
 //network elements
 let State = data.state;
 let ready = false;
-let count;
 
 
 // audio elements
@@ -47,18 +46,7 @@ async function setup() {
     textAlign(CENTER, CENTER);
 
 
-//   Synth =   new Tone.MonoSynth({
-    
-//         "oscillator" : {
-//             "type" : type[l]
-//      },
-//      "envelope" : {
-//          "attack" : 0.1
-//      }
-//     })
 
-//     Synth.connect(Tone.Master);
-//     Tone.Master.volume.value = volume;
 
 
     ready = true;
@@ -119,26 +107,11 @@ function updateEffects() {
     fxV = max(0, min(1, mouseY / height));
 }
 
-// function updateSynth() {
-//     Synth =   new Tone.MonoSynth({
-    
-//         "oscillator" : {
-//             "type" : type[l]
-//      },
-//      "envelope" : {
-//          "attack" : 0.1
-//      }
-//     }).toMaster();
-
-
-// }
 
 window.mousePressed = mousePressed;
 function mousePressed() {
     updateEffects();
-    // updateSynth();
-    // updateData();
-   
+    
 }
 
 
@@ -157,14 +130,6 @@ function drawWords(x) {
     text(type[l], x, 775);
     text(int(frequency), x, height *0.5 );
 }
-
-// window.keyPressed = keyPressed;
-// function keyPressed() {
-//   if (keyCode === LEFT_ARROW) {
-//     const note = frequency;
-//     Synth.triggerAttackRelease(note, "4n");
-//   }
-// }
 
 
 canvasSketch();

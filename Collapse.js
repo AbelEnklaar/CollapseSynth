@@ -17,12 +17,10 @@ let ready = false;
 let synth;
 const volume = -10;
 
-// array with modules
-let modules = ["A", "B", "C"]
+// let fxU =;
+// let fxV =;
+// let l = ;
 
-//module states
-let oscState = false;
-let fxState = false;
 
 
 window.setup = setup;
@@ -31,16 +29,18 @@ async function setup() {
   textAlign(CENTER, CENTER);
 
 
-  Tone.Master.volume.value = volume;
-  synth = new Tone.Synth({
-    oscillator: {
-      type: "square"
-    }
-  });
-   
+  Synth =   new Tone.MonoSynth({
+    
+        "oscillator" : {
+            "type" : type[l]
+     },
+     "envelope" : {
+         "attack" : 0.1
+     }
+    })
 
-  synth.connect(Tone.Master);
-  
+    Synth.connect(Tone.Master);
+    Tone.Master.volume.value = volume;
 
 
   
@@ -71,7 +71,7 @@ function draw() {
   noFill();
   textSize(40);
   drawWords(width * 0.5);
- 
+  frequency = map(fxU, 0, 1, 20, 5000);
   
   
 
@@ -97,19 +97,32 @@ if (fxState == true) {
 
 
 
+function updateSynth() {
+    Synth =   new Tone.MonoSynth({
+    
+        "oscillator" : {
+            "type" : type[l]
+     },
+     "envelope" : {
+         "attack" : 0.1
+     }
+    }).toMaster();
+
+
+}
 
 
 
 window.keyPressed = keyPressed;
 function keyPressed() {
   if (keyCode === LEFT_ARROW) {
-    const notes = ["C", "Db", "F", "Gb", "Bb"];
-    const octaves = [2, 3, 4];
-    const octave = random(octaves);
-    const note = random(notes);
-    synth.triggerAttackRelease(note + octave, "8n");
+    updateSynth();
+    const note = frequency;
+    Synth.triggerAttackRelease(note, "4n");
   }
 }
+
+
 window.drawWords = drawWords;
 function drawWords(x) {
   fill(0);
