@@ -13,36 +13,34 @@ const server = http.createServer(app);
 // This allows us to use HTML, JavaScript, etc
 app.use(express.static(__dirname));
 
-// -------- Start of Custom Server Code -------- //
+
 
 // hook up socketio with the server
-const io = socketio.listen(server);
-
-// number of active users
-let count = 0;
+const io = socketio(server);
 
 // a user joined our site
 io.on("connection", socket => {
-  // increase count by 1
-  count++;
+  socket.on('updateType', (type) => {
+    console.log(type);
+    io.emit('typeUpdated', type);
+  })
 
-  // tell all users the new count
-  io.emit("count", count);
+  socket.on('updateDetune', (detune )=> {
+    console.log(detune);
+    io.emit('detuneUpdated',detune);
+   } )
+  
 
   // when a user leaves the site...
   socket.on("disconnect", () => {
-    // then we reduce the count by 1
-    count--;
-
-    // and tell the new count to the user
-    io.emit("count", count);
+    
   });
 });
 
 // -------- End of Custom Server Code -------- //
 
 // Start listening on a standard port
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 server.listen(port, () => {
   // Print to console just so we know its ready to go...
   console.log("Server listening on http://localhost:" + port);

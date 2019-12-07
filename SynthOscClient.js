@@ -3,16 +3,21 @@ const Tone = require("tone");
 //const AudioEnergy = require("./AudioEnergy");
 const p5 = require("p5");
 let data = require("./SynthState.json");
-
+let socket = require("socket.io-client");
 
 
 // the networking socket
-// socket = io.connect('http://localhost:3000');
+socket = socket('http://localhost:3001');//.connect('http://localhost:3001');
 
 //how to get data from SynthServer.js on startup & on user input > change data & push from this file to server
 
+let count = 0;
+let l = 0;
 
-
+socket.on("count", (newCount) => {
+    count = newCount;
+    console.log("new count: ", newCount);
+})
 
 new p5();
 
@@ -24,17 +29,16 @@ let ready = false;
 
 
 // audio elements
-let frequency;
+let detune;
 let type = ["sine", "square", "triangle"];
-let Synth
-const volume = -2;
+
 
 
 
 // visual elements
-let fxU =data.frequency;
-let fxV =data.type;
-let l ;
+let mouseXmap ;
+let mouseYmap ;
+
 
 
 
@@ -65,14 +69,14 @@ function draw() {
     noFill();
     strokeWeight(dim * 0.0175);
     stroke(255);
-    drawEffectKnob(dim * 0.4, fxU);
-    drawEffectKnob(dim * 0.6, fxV);
-    frequency = map(fxU, 0, 1, 20, 5000);
+    drawEffectKnob(dim * 0.4, mouseXmap);
+    drawEffectKnob(dim * 0.6, mouseYmap);
+   
 
-    if (fxV > 0.33) {
+    if (mouseYmap > 0.33) {
         l = 1;
 
-        if (fxV > 0.66) {
+        if (mouseYmap > 0.66) {
             l = 2;
         }
     } else {
@@ -89,11 +93,31 @@ function draw() {
     let checkData  = {
         State: State,
         Waveform: type[l],
-        Frequency: frequency
+        Detune: detune
     };
 
    console.log(checkData);
    
+}
+
+function calculateOscillatorType(y) {
+
+    // 0 - 1
+    // 0.25 * 3 = 0.75 // 0
+    // 0.5 * 3 = 1.5  //1
+    // 0.75 * 3 = 2.25 // 2
+
+    // if (y === 1.0){ 
+    //     return 2;
+    // } else {
+    //     Math.floor(y * 3)
+    // }
+    
+    return type[y === 1.0 ? 2 : Math.floor(y * 3)];
+}
+
+function calculateDetune(y) {
+    return map(y, 0, 1, 0, 180);
 }
 
 
@@ -103,8 +127,10 @@ function drawEffectKnob(radius, t) {
 }
 
 function updateEffects() {
-    fxU = max(0, min(1, mouseX / width));
-    fxV = max(0, min(1, mouseY / height));
+    mouseXmap = max(0, min(1, mouseX / width));
+    mouseYmap = max(0, min(1, mouseY / height));
+    socket.emit("updateType", calculateOscillatorType(mouseYmap));
+    socket.emit("updateDetune",calculateDetune(mouseXmap))
 }
 
 
@@ -128,7 +154,7 @@ function drawWords(x) {
     fill(255);
     strokeWeight(0);
     text(type[l], x, 775);
-    text(int(frequency), x, height *0.5 );
+    text(int(detune), x, height *0.5 );
 }
 
 
