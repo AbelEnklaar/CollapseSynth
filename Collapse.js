@@ -2,6 +2,31 @@ const canvasSketch = require("canvas-sketch");
 const Tone = require("tone");
 const AudioEnergy = require("./AudioEnergy");
 const p5 = require("p5");
+let socket = require("socket.io-client");
+
+
+
+let currentOscillatorType = 'sine';
+
+// visual elements
+
+socket = socket('http://localhost:3001');//.connect('http://localhost:3001');
+
+//how to get data from SynthServer.js on startup & on user input > change data & push from this file to server
+
+let count = 0;
+let l = 0;
+ 
+
+socket.on("count", (newCount) => {
+    count = newCount;
+    console.log("new count: ", newCount);
+})
+
+socket.on("typeUpdated", (newType) => {
+  console.log("new type: ", newType);
+  currentOscillatorType = newType;
+})
 
 new p5();
 
@@ -10,18 +35,52 @@ let ready = false;
 
 // visual elements
 
+// what is read out from the socket: 
 
+// oscilator module 
+//  - type (sine, square, triangle)
+
+
+// partial module
+//  - partial1Amount (value between 0 & 10)
+//  - partial2Amount (value between 0 & 10)
+
+//reverb  module
+//  - roomsize (value between ..& .. )
+//  - dampening (value between .. & .. )
+
+//filter module 
+//  - type (lowpass, bandpass, highpass)
+//  - frequency (value between .. & ..)
 
 
 // audio elements
-let synth;
+let Synth;
 const volume = -10;
 
-// let fxU =;
-// let fxV =;
-// let l = ;
+//osc module
+let oscillator = ["sine", "square", "triangle"]
+let oScType = 0;
+
+//partial module
+let  partial1Amount;
+let  partial2Amount;
 
 
+//filter module
+let filter = ["lowpass", "bandpass", "highpass"];
+let filterType = 0;
+let filterFrequency = 2000;
+
+//reverb module
+let roomsize;
+let dampening;
+
+//animate nodes
+let oscState = true;
+let partialState = true;
+let filterState = true;
+let reverbState = true;
 
 window.setup = setup;
 async function setup() {
@@ -32,10 +91,17 @@ async function setup() {
   Synth =   new Tone.MonoSynth({
     
         "oscillator" : {
-            "type" : type[l]
+            "type" : currentOscillatorType,
+            "partials" : [1,  partial1Amount, partial2Amount],
      },
      "envelope" : {
          "attack" : 0.1
+     },
+     "filter" : {
+       "Q" : 6 ,
+       "type" : filter[filterType] ,
+       "frequency": filterFrequency,
+       "rolloff" : -24
      }
     })
 
@@ -52,13 +118,13 @@ async function setup() {
 window.draw = draw;
 function draw() {
   if (!ready) return;
-
+ 
   const dim = Math.min(width, height);
   const time = millis() / 1000;
   const duration = 2;
   const playhead = time / duration % 1;
   const anim = sin(playhead * PI * 2) * 0.5 + 0.5;
-  const sPulse = dim * 0.1  * anim;
+  const sPulse = dim * 0.01  * anim;
   
   
   
@@ -71,54 +137,103 @@ function draw() {
   noFill();
   textSize(40);
   drawWords(width * 0.5);
-  frequency = map(fxU, 0, 1, 20, 5000);
+
+  //partial module
+  partial1Amount = map(mouseX, 0, width, 0, 10);
+  partial2Amount =map(mouseY,0, width, 0, 10); 
   
   
 
   //oscillator node
-
   if (oscState == true) {
     strokeWeight(sPulse);
   } else {
 
   }
-  circle(width / 3, height / 3 + 50, dim * 0.2);
+  circle(width / 2, height / 3 , dim * 0.1);
 
-//   //fx node
 
+  //partial node
   strokeWeight(3);
-if (fxState == true) {
+if (partialState == true) {
   strokeWeight(sPulse);
 } else {
 }
- circle(width/ 3 * 2, height/3 + 50, dim * 0.2);
-}
+circle(width / 2 + dim * 0.1, height / 3 - dim * 0.1 , dim * 0.1);
 
+
+//filter node
+strokeWeight(3);
+if (filterState == true) {
+  strokeWeight(sPulse);
+} else {
+}
+circle(width / 2 - dim * 0.1, height / 3 + dim * 0.1 , dim * 0.1);
+
+
+// reverb node
+strokeWeight(3);
+if (reverbState == true) {
+  strokeWeight(sPulse);
+} else {
+}
+circle(width / 2 + dim * 0.1, height / 3 + dim * 0.1 , dim * 0.1);
+}
 
 
 
 function updateSynth() {
     Synth =   new Tone.MonoSynth({
-    
+        
         "oscillator" : {
-            "type" : type[l]
+            "type" : currentOscillatorType,
+            "partials" : [1,  partial1Amount, partial2Amount],
      },
      "envelope" : {
          "attack" : 0.1
-     }
+     },
+    "filter" : {
+      "Q" : 6 ,
+      "type" : filter[filterType] ,
+      "frequency": filterFrequency,
+      "rolloff" : -24
+    }
     }).toMaster();
 
 
 }
 
 
+window.keyTyped = keyTyped;
+function keyTyped() {
+updateSynth();
 
-window.keyPressed = keyPressed;
-function keyPressed() {
-  if (keyCode === LEFT_ARROW) {
-    updateSynth();
-    const note = frequency;
-    Synth.triggerAttackRelease(note, "4n");
+  if (key === "a") {
+    Synth.triggerAttackRelease("C3", "8n");
+  }else if (key === "w") {
+    Synth.triggerAttackRelease("C#3", "8n");
+  } else if (key === "s") {
+    Synth.triggerAttackRelease("D3", "8n");
+  } else if (key === "e") {
+    Synth.triggerAttackRelease("D#3", "8n");
+  } else if (key === "d") {
+    Synth.triggerAttackRelease("E3", "8n");
+  } else if (key === "f") {
+    Synth.triggerAttackRelease("F3", "8n");
+  } else if (key === "t") {
+    Synth.triggerAttackRelease("F#3", "8n"); 
+  } else if (key === "g") {
+    Synth.triggerAttackRelease("G3", "8n");
+  } else if (key === "y") {
+    Synth.triggerAttackRelease("G#3", "8n");
+  } else if (key === "h") {
+    Synth.triggerAttackRelease("A3", "8n");
+  } else if (key === "u") {
+    Synth.triggerAttackRelease("A#3", "8n");
+  } else if (key === "j") {
+    Synth.triggerAttackRelease("B3", "8n");
+  } else if (key === "k") {
+    Synth.triggerAttackRelease("C4s" , "8n");
   }
 }
 
