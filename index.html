@@ -1,23 +1,28 @@
 <html>
-
-<head>
-  <title>sketch</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
+  <head>
+    <title>sketch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
     body {
       padding: 0;
       margin: 0;
+      cursor: crosshair;
     }
-  </style>
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
-  <script src="clmtrackr.js"></script>
-  <script src="util-face-tracker.js"></script>
-  <script src="sketch.js"></script>
-</head>
+    <!--
+      We use unpkg instead of cdnjs as its recommended by tone.js docs
+    -->
+    <script src="https://unpkg.com/tone@13.8.25/build/Tone.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+    <!-- audio energy for hooking up visuals to audio  -->
+    <script src="AudioEnergy.js"></script>
 
-<body>
-</body>
+    <!-- Synth oscilator and for now sound output  -->
+    <script src="SynthOscClient.js"></script>
 
+
+  </head>
+  <body></body>
 </html>
