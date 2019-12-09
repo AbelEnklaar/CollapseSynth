@@ -24,8 +24,10 @@ function setup() {
   textAlign(CENTER, CENTER);
 }
 
-
-
+window.windowResized = windowResized;
+function windowResized () {
+  resizeCanvas(windowWidth, windowHeight);
+}
 
 window.draw = draw;
 function draw() {
@@ -49,9 +51,11 @@ function draw() {
   circle(width / 2, height / 2, circle2dim);
 
 
-  console.log(partial1Amount, partial2Amount);
 
 
+  strokeWeight(3);
+  textSize(40);
+  drawWords(width * 0.5);
 
 }
 
@@ -90,11 +94,11 @@ updateSocketState(false);
 window.drawWords = drawWords;
 function drawWords(x) {
   fill(0);
-  text("COLLAPSE", x, 80);
-  fill(255);
-  strokeWeight(0);
-  text(partial1Amount, x, 775);
-  text(partial2Amount, x, height * 0.5);
+  text("COLLAPSE", x, height/8 * 1);
+ textSize(25);
+ strokeWeight(1.5);
+  text("Partial Module", x, height/8 * 7.5);
+
 }
 window.updateSocketState=updateSocketState
 function updateSocketState(y) {
