@@ -10,9 +10,6 @@ let socket = require("socket.io-client");
 socket = socket('http://localhost:42069');
 
 
-const delay = 1000;
-let count = 0;
-let l = 0;
 
 
 
@@ -28,7 +25,7 @@ let ready = false;
 // audio elements
 let detune;
 let type = ["sine", "square", "sawtooth"];
-
+let l;
 
 
 
@@ -54,7 +51,10 @@ async function setup() {
 
 
 }
-
+window.windowResized = windowResized;
+function windowResized () {
+  resizeCanvas(windowWidth, windowHeight);
+}
 
 window.draw = draw;
 function draw() {
@@ -87,13 +87,7 @@ function draw() {
     textSize(40);
     drawWords(width * 0.5);
 
-    let checkData = {
-
-        Waveform: type[l],
-        Detune: detune
-    };
-
-    console.log(checkData);
+  
 
 }
 
@@ -152,11 +146,18 @@ updateSocketState(false);
 window.drawWords = drawWords;
 function drawWords(x) {
     fill(0);
-    text("COLLAPSE", x, 80);
+    text("COLLAPSE", x,  height/8 * 1);
+    textSize(20);
+    text("detune", x, height*0.5 - 25);
     fill(255);
     strokeWeight(0);
-    text(type[l], x, 775);
+    text(type[l], x, height/8 * 7);
+    
     text(int(detune), x, height * 0.5);
+    textSize(25);
+    strokeWeight(1.5);
+    fill(0);
+     text("Oscillator Module", x, height/8 * 7.5);
 }
 window.updateSocketState=updateSocketState
 function updateSocketState(y) {
