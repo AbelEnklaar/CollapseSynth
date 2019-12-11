@@ -15,8 +15,6 @@ const server = http.createServer(app);
 // This allows us to use HTML, JavaScript, etc
 app.use(express.static(__dirname));
 
-
-
 // hook up socketio with the server
 const io = socketio(server);
 
@@ -41,7 +39,6 @@ socket.on("partialActive", (state) => {
 socket.on("reverbActive", (state) => {
   console.log("reverb module: ", state);
   io.emit("reverbActive", state);
-
 })
 
   socket.on("updateType", (type) => {
@@ -72,13 +69,10 @@ socket.on("reverbActive", (state) => {
     console.log("Dampening : ", dampening);
     io.emit("dampeningUpdated", dampening);
   })
-
   // when a user leaves the site...
   socket.on("disconnect", () => {
-
   });
 });
-
 // -------- End of Custom Server Code -------- //
 
 // Start listening on a standard port

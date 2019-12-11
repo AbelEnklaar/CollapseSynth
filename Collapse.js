@@ -141,6 +141,7 @@ async function setup() {
   //set ready to true when all of the above has been done
   ready = true;
 }
+//Updates drawing when resizing the window
 window.windowResized = windowResized;
 function windowResized () {
   resizeCanvas(windowWidth, windowHeight);
