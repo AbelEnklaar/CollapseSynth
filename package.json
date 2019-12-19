@@ -1,22 +1,19 @@
 {
-  "name": "finalDeliverable",
+  "name": "midimodule",
   "version": "1.0.0",
   "description": "",
-  "main": "AudioEnergy.js",
+  "main": "midiModule.js",
+  "dependencies": {
+    "canvas-sketch": "^0.7.1",
+    "p5": "^0.10.2",
+    "tone": "^13.8.25",
+    "webmidi": "^2.5.1"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "canvas-sketch": "^0.7.1",
-    "express": "^4.17.1",
-    "jazz-midi": "^1.7.1",
-    "p5": "^0.10.2",
-    "socket.io": "^2.3.0",
-    "socket.io-client": "^2.3.0",
-    "tone": "^13.8.25",
-    "web-midi-api": "^2.0.6"
-  }
+  "license": "ISC"
 }

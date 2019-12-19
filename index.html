@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>sketch</title>
+    <title>MidiModule</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
     body {
@@ -9,18 +9,18 @@
       cursor: crosshair;
     }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 
-    <!--
-      We use unpkg instead of cdnjs as its recommended by tone.js docs
-    -->
-    <script src="https://unpkg.com/tone@13.8.25/build/Tone.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
-    <!-- audio energy for hooking up visuals to audio  -->
-    <script src="AudioEnergy.js"></script>
+    <!-- CDN for webmidi.js  -->
+ <script src="https://cdn.jsdelivr.net/npm/webmidi"></script>
 
-    <!-- Synth oscilator and for now sound output  -->
-    <script src="SynthOscClient.js"></script>
+<!-- CDN for tone.js -->
+ <script src="https://unpkg.com/tone@13.8.25/build/Tone.js"></script>
+
+ <!-- CDN for p5.js -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+ 
+  <!-- midimodule main script -->
+    <script src="midiModule.js"></script>
 
 
   </head>
