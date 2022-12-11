@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "canvas-sketch": "^0.7.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "jazz-midi": "^1.7.1",
     "p5": "^0.10.2",
     "socket.io": "^2.3.0",
